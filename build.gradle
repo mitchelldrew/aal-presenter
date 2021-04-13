@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.aal'
-version = '0.0.003'
+version = '0.0.005'
 def frameworkName = 'presenter'
 
 repositories {
@@ -41,7 +41,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies{
-                implementation 'com.aal:model:0.0.004'
+                implementation 'com.aal:model:0.0.005'
             }
         }
         jvmMain {
