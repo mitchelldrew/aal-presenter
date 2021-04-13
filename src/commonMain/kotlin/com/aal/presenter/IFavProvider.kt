@@ -1,16 +1,14 @@
 package com.aal.presenter
 
-import com.aal.model.Restaurant
-
 interface IFavProvider {
     fun get()
-    fun save(element:Restaurant)
-    fun delete(element:Restaurant)
+    fun save(name:String)
+    fun delete(name:String)
     fun addListener(favListener:Listener)
     fun removeListener(favListener:Listener)
 
     interface Listener{
-        fun onReceive(elements:List<Restaurant>)
+        fun onReceive(names:List<String>)
         fun onError(error:Exception)
     }
 }

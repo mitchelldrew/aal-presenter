@@ -41,7 +41,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies{
-                implementation 'com.aal:model:0.0.001'
+                implementation 'com.aal:model:0.0.004'
             }
         }
         jvmMain {
