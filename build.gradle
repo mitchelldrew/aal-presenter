@@ -1,0 +1,104 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithTests
+import org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask
+
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform' version '1.4.10'
+    id 'maven-publish'
+}
+
+group = 'com.aal'
+version = '0.0.002'
+def frameworkName = 'presenter'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+kotlin {
+    jvm{
+        compilations.all {
+            kotlinOptions.jvmTarget = '1.8'
+        }
+        testRuns["test"].executionTask.configure {
+            useJUnit()
+        }
+    }
+    ios("ios")
+
+    targets {
+        iosArm64("iosA64")
+        iosArm32("iosA32")
+        iosX64("iosX64")
+        configure([iosA32,iosX64,iosA64]) {
+            binaries.framework {
+                embedBitcode("bitcode")
+                baseName = frameworkName
+            }
+        }
+    }
+    
+    sourceSets {
+        commonMain {
+            dependencies{
+                implementation 'com.aal:model:0.0.001'
+            }
+        }
+        jvmMain {
+            dependencies{
+                commonMain
+            }
+        }
+        jvmTest {
+            dependencies {
+                commonMain
+                implementation kotlin('test-junit')
+            }
+        }
+        nativeMain {
+            dependencies{
+                commonMain
+            }
+        }
+        iosX64Main{
+            dependencies{
+                commonMain
+            }
+        }
+        iosArm64Main{
+            dependencies {
+                commonMain
+            }
+        }
+    }
+
+
+    task releaseFatFramework(type: FatFrameworkTask){
+        baseName = frameworkName
+        destinationDir = file("$buildDir/fat-framework/release")
+        from(
+                targets.iosA32.binaries.getFramework("DEBUG"),
+                targets.iosA64.binaries.getFramework("DEBUG")
+        )
+    }
+
+    task movePod(type: Exec){
+        commandLine 'sh'
+        args = ["movePod.sh"]
+    }
+
+    task uploadPodDebug(type: Exec){
+        commandLine 'sh'
+        args = ["uploadPod.sh", version, "--debug"]
+    }
+
+    task uploadPodRelease(type: Exec){
+        commandLine 'sh'
+        args = ["uploadPod.sh", version, "--release"]
+    }
+
+    uploadPodDebug.dependsOn(linkDebugFrameworkIosX64)
+    uploadPodRelease.dependsOn(releaseFatFramework)
+    movePod.dependsOn(linkDebugFrameworkIosX64)
+}
+
