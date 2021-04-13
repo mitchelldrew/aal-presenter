@@ -25,8 +25,8 @@ class HomePresenter(private var restProvider: IRestaurantProvider?, private var 
 
     private fun getImageListener(): IImageProvider.Listener {
         return object : IImageProvider.Listener {
-            override fun onReceive(url: String, imgBase64: String) { view?.displayImg(url,imgBase64) }
-            override fun onError(url: String, error: Exception) { view?.error(error) }
+            override fun onReceive(imgRef: String, imgBase64: String) { view?.displayImg(imgRef,imgBase64) }
+            override fun onError(imgRef: String, error: Exception) { view?.error(error) }
         }
     }
 
