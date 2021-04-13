@@ -33,7 +33,7 @@ class HomePresenter(private var restProvider: IRestaurantProvider?, private var 
 
     private fun getFavListener(): IFavProvider.Listener {
         return object: IFavProvider.Listener {
-            override fun onReceive(elements: List<Restaurant>) {view?.displayFavs(elements)}
+            override fun onReceive(elements: List<String>) {view?.displayFavs(elements)}
             override fun onError(error: Exception) {view?.error(error)}
         }
     }
@@ -58,13 +58,13 @@ class HomePresenter(private var restProvider: IRestaurantProvider?, private var 
         restProvider?.get(ne,sw)
     }
 
-    override fun saveFav(restaurant: Restaurant) {
-        favoritesProvider?.save(restaurant)
+    override fun saveFav(name:String) {
+        favoritesProvider?.save(name)
         favoritesProvider?.get()
     }
 
-    override fun deleteFav(restaurant: Restaurant) {
-        favoritesProvider?.delete(restaurant)
+    override fun deleteFav(name:String) {
+        favoritesProvider?.delete(name)
         favoritesProvider?.get()
     }
 
