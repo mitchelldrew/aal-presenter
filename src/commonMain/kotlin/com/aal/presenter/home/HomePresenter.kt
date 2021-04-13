@@ -4,10 +4,9 @@ import com.aal.model.Restaurant
 import com.aal.presenter.IFavProvider
 import com.aal.presenter.IImageProvider
 import com.aal.presenter.IRestaurantProvider
-import com.aal.presenter.LatLon
 
 
-class HomePresenter(private var restProvider: IRestaurantProvider?, private var favoritesProvider: IFavProvider?, private var imageProvider: IImageProvider?):
+class HomePresenter(private var restProvider: IRestaurantProvider?, private var favoritesProvider: IFavProvider?, private var imageProvider: IImageProvider?, private val searchRadius:Double):
     IHomePresenter {
     private var view: IHomeView? = null
     private var restListener: IRestaurantProvider.Listener? = null
@@ -40,7 +39,7 @@ class HomePresenter(private var restProvider: IRestaurantProvider?, private var 
 
     private fun getRestaurantListener(): IRestaurantProvider.Listener {
         return object : IRestaurantProvider.Listener {
-            override fun onReceive(ne: LatLon, sw: LatLon, elements: List<Restaurant>) {
+            override fun onReceive(elements: List<Restaurant>) {
                 view?.displayRests(elements)
             }
             override fun onReceive(query: String, elements: List<Restaurant>) { view?.displayRests(elements) }
@@ -54,8 +53,8 @@ class HomePresenter(private var restProvider: IRestaurantProvider?, private var 
         favoritesProvider?.get()
     }
 
-    override fun show(ne:LatLon,sw:LatLon) {
-        restProvider?.get(ne,sw)
+    override fun show(lat:Double,lng:Double) {
+        restProvider?.get(lat,lng,searchRadius)
     }
 
     override fun saveFav(name:String) {

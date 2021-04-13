@@ -1,7 +1,6 @@
 package com.aal.presenter.home
 
 import com.aal.model.Restaurant
-import com.aal.presenter.LatLon
 
 interface IHomeView {
     fun displayRests(rests:List<Restaurant>)

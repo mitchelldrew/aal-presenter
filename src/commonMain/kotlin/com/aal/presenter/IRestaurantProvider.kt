@@ -3,7 +3,7 @@ package com.aal.presenter
 import com.aal.model.Restaurant
 
 interface IRestaurantProvider {
-    fun get(neLat:Double, neLng:Double, swLat:Double, swLng:Double)
+    fun get(lat:Double, lng:Double, rad:Double)
     fun search(query:String)
     fun addListener(restListener: Listener)
     fun removeListener(restListener: Listener)
