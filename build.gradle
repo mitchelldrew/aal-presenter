@@ -55,11 +55,6 @@ kotlin {
                 implementation kotlin('test-junit')
             }
         }
-        nativeMain {
-            dependencies{
-                commonMain
-            }
-        }
         iosX64Main{
             dependencies{
                 commonMain

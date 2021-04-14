@@ -2,11 +2,12 @@ package com.aal.presenter.home
 
 import com.aal.model.Restaurant
 import com.aal.presenter.IFavProvider
+import com.aal.presenter.IFreezer
 import com.aal.presenter.IImageProvider
 import com.aal.presenter.IRestaurantProvider
 
 
-class HomePresenter(private var restProvider: IRestaurantProvider?, private var favoritesProvider: IFavProvider?, private var imageProvider: IImageProvider?, private val searchRadius:Double):
+class HomePresenter(private var freezer:IFreezer?, private var restProvider: IRestaurantProvider?, private var favoritesProvider: IFavProvider?, private var imageProvider: IImageProvider?, private val searchRadius:Double):
     IHomePresenter {
     private var view: IHomeView? = null
     private var restListener: IRestaurantProvider.Listener? = null
@@ -18,9 +19,9 @@ class HomePresenter(private var restProvider: IRestaurantProvider?, private var 
         restListener = getRestaurantListener()
         imageListener = getImageListener()
         favListener = getFavListener()
-        restProvider?.addListener(restListener!!)
-        imageProvider?.addListener(imageListener!!)
-        favoritesProvider?.addListener(favListener!!)
+        restProvider?.addListener(freezer?.freeze(restListener!!) as IRestaurantProvider.Listener)
+        imageProvider?.addListener(freezer?.freeze(imageProvider!!) as IImageProvider.Listener)
+        favoritesProvider?.addListener(freezer?.freeze(favoritesProvider!!) as IFavProvider.Listener)
     }
 
     private fun getImageListener(): IImageProvider.Listener {
