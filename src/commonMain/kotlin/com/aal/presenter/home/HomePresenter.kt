@@ -14,7 +14,6 @@ class HomePresenter(private var freezer: IFreezer?, private var restProvider: IR
     private var favListener: IFavProvider.Listener? = null
     private var imageListener: IImageProvider.Listener? = null
 
-
     private fun attachListeners(){
         restListener = getRestaurantListener()
         imageListener = getImageListener()
@@ -40,15 +39,18 @@ class HomePresenter(private var freezer: IFreezer?, private var restProvider: IR
 
     private fun getRestaurantListener(): IRestaurantProvider.Listener {
         return object : IRestaurantProvider.Listener {
-            override fun onReceive(elements: List<Restaurant>) {
-                view?.displayRests(elements)
-                for(rest in elements){
-                    imageProvider?.get(rest.iconRef)
-                }
-            }
-            override fun onReceive(query: String, elements: List<Restaurant>) { view?.displayRests(elements) }
+            override fun onReceive(elements: List<Restaurant>) {handleRests(elements)}
+            override fun onReceive(query: String, elements: List<Restaurant>) {handleRests(elements)}
             override fun onError(error: Exception) {view?.error(error)}
         }
+    }
+
+    private fun handleRests(elements:List<Restaurant>){
+        for(rest in elements){
+            freezer?.freeze(rest)
+            imageProvider?.get(rest.iconRef)
+        }
+        view?.displayRests(elements)
     }
 
     override fun setView(view: IHomeView) {

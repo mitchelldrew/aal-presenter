@@ -92,6 +92,7 @@ kotlin {
         args = ["uploadPod.sh", version, "--release"]
     }
 
+    linkDebugFrameworkIosX64.dependsOn(jvmTest)
     uploadPodDebug.dependsOn(linkDebugFrameworkIosX64)
     uploadPodRelease.dependsOn(releaseFatFramework)
     movePod.dependsOn(linkDebugFrameworkIosX64)
